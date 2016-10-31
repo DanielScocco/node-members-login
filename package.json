@@ -1,0 +1,11 @@
+{
+  "name": "MarketingNode",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "^4.x",
+    "pg":"^2.x"
+  },
+  "engines": {
+    "node": "^5.x"
+  }
+}
