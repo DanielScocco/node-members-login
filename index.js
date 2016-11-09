@@ -2,13 +2,16 @@
 
 var express = require('express');
 var app = express(); 
-var pg = require('pg');
+
+app.set('view engine','pug');
+app.set('views','./views');
+app.locals.pretty = true;
 
 app.use(express.static(__dirname + '/public'));
-pg.defaults.ssl = true;
 
 app.get('/',function(req,res) {
-	res.sendFile(__dirname + "/public/index.html");
+    var data = {title:'hello my friend',message:'sup everyone'};
+	res.render('index',data);
 });
 
 app.listen(process.env.PORT || 3000,function(){
