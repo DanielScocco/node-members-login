@@ -2,7 +2,9 @@
   "name": "MarketingNode",
   "version": "0.0.1",
   "dependencies": {
-    "express": "^4.x",
+    "express": "^4.14.0",
+    "install": "^0.8.2",
+    "npm": "^3.10.9",
     "pug": "^2.0.0-beta6"
   },
   "engines": {
