@@ -2,8 +2,10 @@
   "name": "MarketingNode",
   "version": "0.0.1",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "install": "^0.8.2",
+    "mongodb": "^2.2.11",
     "npm": "^3.10.9",
     "pug": "^2.0.0-beta6"
   },
