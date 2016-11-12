@@ -26,7 +26,7 @@ html(lang='en')
           .col-lg-12
             div(align='center')
               h1.page-header
-                img(src='/images/logo.png', height='100', width='570')
+                img(src='/images/logo.png')
         // /.row
       // /.container-fluid
       div(align='center')
@@ -48,12 +48,21 @@ html(lang='en')
           .col-md-12
             form(role='form' action='/signup' method='POST')
               label New Member Signup
+              if refError
+                br
+                label.redFont *Couldn't find referring member
+              br 
+              input(type='email',placeholder='Email of Referring Member', name='referral')  
               br
-              input(type='text', placeholder='Referring Member' name='referral')
+              input(type='email', placeholder='Your Email', name='email')
               br
-              input(type='email', placeholder='Email' name='email')
+              input(type='password', placeholder='Password', name='pass')
               br
-              input(type='password', placeholder='Password' name='pass')
+              br
+              label.notBold
+                  input#checkbox1(type='checkbox',required)
+                  | I agree with the 
+                  a(href='http://marketingnode.com/terms/') Terms of Service
               br
               br
               button.btn.btn-success(type='submit') Submit

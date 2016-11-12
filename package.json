@@ -2,7 +2,9 @@
   "name": "MarketingNode",
   "version": "0.0.1",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "install": "^0.8.2",
     "mongodb": "^2.2.11",
