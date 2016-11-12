@@ -27,6 +27,11 @@ html(lang='en')
             div(align='center')
               h1.page-header
                 img(src='/images/logo.png')
+            ol.breadcrumb
+              li.active
+                i.fa.fa-dashboard
+                |User: #{email} | Points: #{points} 
+                a(href='/logout/') Logout
         // /.row
       // /.container-fluid
     // /#page-wrapper

@@ -36,7 +36,7 @@ app.post('/signup',function(req,res){
             var rand = randomString();
             res.cookie('id',rand,{maxAge:900000000000,httpOnly:true,secure:true});
 
-            var user = {referral:req.body.referral,email:req.body.email,pass:hash,cookie:rand};
+            var user = {referral:req.body.referral,email:req.body.email,pass:hash,cookie:rand,points:0};
 
             db.collection('users').save(user,function(err,result){
                 if(err)
@@ -55,13 +55,13 @@ app.post('/signup',function(req,res){
 app.get('/',function(req,res) {
     //check if logged, if so redirect, else return index.html
     var cookieId = req.cookies.id;
-    console.log('cookie='+cookieId);
     db.collection('users').find({cookie:cookieId}).toArray(function(err,result){
         if(err)
             throw err;
         if(result.length){
             res.redirect('/members/');
         }
+        //not logged, display index.html
         else{
             var data;
             if(req.query['err']=='ref')
@@ -74,7 +74,20 @@ app.get('/',function(req,res) {
 });
 
 app.get('/members',function(req,res){
-	res.render('members');
+    //check if logged, else redirect
+    var cookieId = req.cookies.id;
+    db.collection('users').find({cookie:cookieId}).toArray(function(err,result){
+        if(err)
+            throw err;
+        if(result.length){
+            var userEmail = result.email;
+            var userPoints = result.point;
+            data = {email=userEmail,points=userPoints};
+        	res.render('members',data);
+        }
+        else{
+            res.redirect('/');
+        }
 });
 
 app.get('*',function(req,res){
@@ -109,5 +122,5 @@ function randomString(){
 
     string3 = string3.substring(0,10);
 
-    return string1+string2+string3;
+    return string1++string2+string3;
 }
