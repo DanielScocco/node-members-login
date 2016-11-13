@@ -30,7 +30,7 @@ app.post('/signup',function(req,res){
     var ref = req.body.referral;
     db.collection('users').find({email:ref}).toArray(function(err,result){
         //referral is valid, signup user
-        if(true){
+        if(result.length){
             var salt = bcrypt.genSaltSync(10);
             var hash = bcrypt.hashSync(req.body.pass,salt);
 
