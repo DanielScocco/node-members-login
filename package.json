@@ -9,7 +9,8 @@
     "install": "^0.8.2",
     "mongodb": "^2.2.11",
     "npm": "^3.10.9",
-    "pug": "^2.0.0-beta6"
+    "pug": "^2.0.0-beta6",
+    "serve-favicon": "^2.3.0"
   },
   "engines": {
     "node": "^5.x"

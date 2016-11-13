@@ -6,18 +6,20 @@ var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var bcrypt = require ('bcrypt');
 var cookieParser = require('cookie-parser');
+var favicon = require('serve-favicon');
 
 app.set('view engine','pug');
 app.set('views','./views');
-app.locals.pretty = true;
+app.locals.pretty = true; //output pretty html
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(cookieParser());
+app.use(express.static(__dirname + '/public')); 
+app.use(bodyParser.urlencoded({extended:true})); 
+app.use(cookieParser()); 
+app.use(favicon(__dirname + '/public/images/favicon.ico')); 
 
 var db;
 
-MongoClient.connect('mongodb://mnodeu:lkajf33@ds151127.mlab.com:51127/mnode',function(err,database){
+MongoClient.connect('mongodb://dbu:password@ds151127.mlab.com:51127/dbname',function(err,database){
     if(err)
         throw err;
     db = database;    
@@ -28,15 +30,15 @@ app.post('/signup',function(req,res){
     var ref = req.body.referral;
     db.collection('users').find({email:ref}).toArray(function(err,result){
         //referral is valid, signup user
-        if(result.length){
+        if(true){
             var salt = bcrypt.genSaltSync(10);
             var hash = bcrypt.hashSync(req.body.pass,salt);
 
             //set cookie on browser and db
             var rand = randomString();
-            res.cookie('id',rand,{maxAge:900000000000,httpOnly:true,secure:true});
+            res.cookie('id',rand,{maxAge:900000000000,httpOnly:true});
 
-            var user = {referral:req.body.referral,email:req.body.email,pass:hash,cookie:rand,points:0};
+            var user = {referral:req.body.referral,email:req.body.email,pass:hash,cookie:rand,points:0,novice:1};
 
             db.collection('users').save(user,function(err,result){
                 if(err)
@@ -63,11 +65,11 @@ app.get('/',function(req,res) {
         }
         //not logged, display index.html
         else{
-            var data;
+            var data = {refError:false,usrError:false};
             if(req.query['err']=='ref')
-                data = {refError:true};
-            else
-                data = {refError:false};
+                data.refError = true;
+            if(req.query['err']=='usr')
+                data.usrError = true;
 	        res.render('index',data);
        }
     });
@@ -80,14 +82,64 @@ app.get('/members',function(req,res){
         if(err)
             throw err;
         if(result.length){
-            var userEmail = result.email;
-            var userPoints = result.point;
-            data = {email=userEmail,points=userPoints};
+            var userEmail = result[0].email;
+            var userPoints = result[0].points;
+            var novice;
+            if(result[0].novice==1)
+                novice = true;
+            else
+                novice = false;
+            var data = {email:userEmail,points:userPoints,showInfo:novice};
         	res.render('members',data);
         }
         else{
             res.redirect('/');
         }
+    });
+});
+
+app.post('/login',function(req,res){
+    var providedEmail = req.body.email;
+    var providedPass = req.body.pass;
+
+
+    //check user and pass
+    db.collection('users').find({email:providedEmail}).toArray(function(err,result){
+        if(err)
+            throw err;
+        if(result.length){
+            var hash = result[0].pass;
+            if(bcrypt.compareSync(providedPass,hash)){
+                var rand = randomString();
+                res.cookie('id',rand,{maxAge:900000000000,httpOnly:true});
+                
+                db.collection('users').update({email:providedEmail},{$set:{cookie:rand}},function(err,result){
+                    if(err)
+                        throw err;
+                    res.redirect('/members/');
+                });
+            }
+            else{
+                res.redirect('/?err=usr');
+            }    
+        }
+        else{
+            res.redirect('/?err=usr');
+        }
+    });    
+});
+
+
+app.get('/logout',function(req,res){
+    //remove cookie from db
+    var cookieId = req.cookies.id;
+    db.collection('users').update({cookie:cookieId},{$set:{cookie:''}},function(err,updated){
+        if(err)
+            throw err;
+    });
+    //remove cookie from browser
+    res.clearCookie('id');
+    res.redirect('/');
 });
 
 app.get('*',function(req,res){
@@ -122,5 +174,5 @@ function randomString(){
 
     string3 = string3.substring(0,10);
 
-    return string1++string2+string3;
+    return string1+string2+string3;
 }

@@ -29,9 +29,29 @@ html(lang='en')
                 img(src='/images/logo.png')
             ol.breadcrumb
               li.active
-                i.fa.fa-dashboard
-                |User: #{email} | Points: #{points} 
-                a(href='/logout/') Logout
+                i.fa.fa-user
+                |  User: #{email}
+              li.active
+                i.fa.fa-money
+                |  Points: #{points}
+              li.active
+                i.fa.fa-envelope
+                a(href='mailto:contact@marketingnode.com')  Send Us Feedback
+              li.active
+                i.fa.fa-sign-out 
+                a(href='/logout/')  Logout
+            if showInfo
+              .alert.alert-success
+                strong How it works:
+                |  Marketing Node is a community of webmasters and Internet marketers. The goal is to help members gain more exposure and traffic to their sites. Every time you link to a page listed on the "Request Board" below you earn points. The higher the domain authority of the page where the link is featured, the more points you earn. Once you reach 10 points you can post your own page on the "Request Board," so that other members will link to it and earn points. The more you promote the pages of other members, the more requests you will be able to post and the more links and traffic you'll get.
+            .alert.alert-danger
+              strong Rules:
+              ul
+                li You can link from sites you own, or from other sites via guest posts.
+                li Gambling, porn, violence and related content is NOT allowed.
+                li Only link from high-quality and relevant sites, else you might get banned.
+                li Only post requests to high-quality content, else you might get banned.
+                li You are not obligated to link to any of the requests. Only do so if you believe the content is relevant to your site/guest post, and high-quality.
         // /.row
       // /.container-fluid
     // /#page-wrapper
