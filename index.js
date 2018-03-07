@@ -19,7 +19,7 @@ app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 var db;
 
-MongoClient.connect('mongodb://dbu:password@ds151127.mlab.com:51127/dbname',function(err,database){
+MongoClient.connect('mongodb://db',function(err,database){
     if(err)
         throw err;
     db = database;    
